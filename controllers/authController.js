@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
-const sendEmail = require('./../utils/email');
+const Email = require('./../utils/email');
 const User = require('./../models/userModel');
 
 const signToken = (id) => {
@@ -43,6 +43,9 @@ exports.signup = catchAsync(async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
   });
+
+  const url = `${req.protocol}://${req.get('host')}/me`;
+  await new Email(newUser, url).sendWelcome();
 
   createSendToken(newUser, 201, res);
 });
@@ -157,18 +160,14 @@ exports.forgotPasswsord = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // 3) send it to user email
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/users/resetPassword/${resetToken}`;
 
   const message = `submit you new PATCH request with your new password and passwordConfirm to: ${resetURL}`;
 
   try {
-    await sendEmail({
-      email: user.email,
-      subject: 'your password reset token is valid for 10 mins',
-      message,
-    });
+    const resetURL = `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/users/resetPassword/${resetToken}`;
+    await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({
       status: 'success',
