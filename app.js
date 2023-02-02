@@ -13,6 +13,8 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRouter');
 const userRouter = require('./routes/userRouter');
 const reviewRouter = require('./routes/reviewRouter');
+const bookingRouter = require('./routes/bookingRouter');
+const bookingController = require('./controllers/bookingController');
 const viewRouter = require('./routes/viewRouter');
 
 const app = express();
@@ -38,12 +40,10 @@ const limiter = rateLimit({
 // limit requests
 app.use('/api', limiter);
 
+app.use('/webhook-checkout', express.raw(), bookingController.webhookCheckout);
+
 // body parser
-app.use(
-  express.json({
-    limit: '10kb',
-  })
-);
+app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
@@ -81,6 +81,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`can't find ${req.originalUrl} on this server`, 404));
