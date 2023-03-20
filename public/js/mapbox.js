@@ -24,7 +24,7 @@ export const displayMap = (locations) => {
       .addTo(map);
 
     // add popup
-    new mapboxgl.Popup({ offset: 30 })
+    new mapboxgl.Popup({ offset: 30, focusAfterOpen: false })
       .setLngLat(location.coordinates)
       .setHTML(`<p>Day ${location.day} : ${location.description}</p>`)
       .addTo(map);

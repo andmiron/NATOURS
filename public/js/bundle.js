@@ -6697,7 +6697,8 @@ var displayMap = function displayMap(locations) {
 
     // add popup
     new mapboxgl.Popup({
-      offset: 30
+      offset: 30,
+      focusAfterOpen: false
     }).setLngLat(location.coordinates).setHTML("<p>Day ".concat(location.day, " : ").concat(location.description, "</p>")).addTo(map);
 
     // extend map bounds to include current location
@@ -32321,7 +32322,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64268" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54598" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
