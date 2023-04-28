@@ -2,6 +2,8 @@
 
 Little application showing vacation tours.
 
+Server run by ExpressJS, basic routing, middlewares. PUG as template engine.
+
 Implemented authentification using JWT tokens.
 
 Tours cards include some information that is stored in mongoDB and retrieved using mongoose.
